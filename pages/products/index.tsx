@@ -44,6 +44,28 @@ export default function index({ products = [], categories = [], totalCount }: Pa
         }
     }, [router.query])
 
+    // show featured only
+    const [showFeaturedOnly, setShowFeaturedOnly] = useState(false)
+    const handleShowFeaturedOnly = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        let shouldShowFeatured = !showFeaturedOnly
+        setShowFeaturedOnly(shouldShowFeatured)
+
+        if (shouldShowFeatured) {
+            router.push({ pathname: '/products', query: { ...router.query, featured: shouldShowFeatured } })
+        } else {
+            const { featured, ...newQueryObject } = router.query;
+            router.push({ pathname: '/products', query: newQueryObject })
+        }
+        setIsFiltersMenuOpen(false)
+    }
+    useEffect(() => {
+        const showFeaturedOnly = router.query.featured as string
+        if (showFeaturedOnly) {
+            setShowFeaturedOnly(showFeaturedOnly == "true" ? true : false)
+        }
+    }, [router.query])
+
     // category query
     const [categoriesSearch, setCategoriesSearch] = useState(Object.fromEntries(categories.map(category => [category.id, false])))
     const handleCategorySearch = (e?: React.FormEvent<HTMLFormElement>) => {
@@ -100,6 +122,7 @@ export default function index({ products = [], categories = [], totalCount }: Pa
         setCategoriesSearch(previousCategoriesSearch => Object.fromEntries(Object.keys(previousCategoriesSearch).map(category => [category, false])))
         setSearch('')
         setIsFiltersMenuOpen(false)
+        setShowFeaturedOnly(false)
         router.push({ pathname: '/products' })
     }
 
@@ -112,7 +135,7 @@ export default function index({ products = [], categories = [], totalCount }: Pa
     // handles filter menu open/close
     const [isFiltersMenuOpen, setIsFiltersMenuOpen] = useState(false)
     const filtersMenuRef = useRef<HTMLDivElement>(null)
-    useOnClickOutside(filtersMenuRef, () => setIsFiltersMenuOpen(false))
+    // useOnClickOutside(filtersMenuRef, () => setIsFiltersMenuOpen(false))
 
     // scroll to top of page if query changes
     const topOfPageRef = useRef(null)
@@ -128,11 +151,11 @@ export default function index({ products = [], categories = [], totalCount }: Pa
     return (
         <Layout title="Products" enableFooter={false}>
             <div className="flex h-full relative">
-                <div className={`absolute xl:relative h-full flex justify-start ${isFiltersMenuOpen ? 'w-full xl:w-auto z-10' : 'bg-opacity-0'} bg-black bg-opacity-80`} aria-expanded={isFiltersMenuOpen} role="menu" id="filtersMenu" aria-labelledby="filtersMenuButton">
+                <div className={`absolute xl:relative min-h-full flex justify-start ${isFiltersMenuOpen ? 'w-full xl:w-auto z-10' : 'bg-opacity-0'} bg-black bg-opacity-80`} aria-expanded={isFiltersMenuOpen} role="menu" id="filtersMenu" aria-labelledby="filtersMenuButton">
                     <div ref={filtersMenuRef} className="relative h-full bg-primary-50 border-r border-gray-200">
-                        <div className={`${isFiltersMenuOpen ? 'block' : 'hidden'} xl:block flex flex-col items-center justify-center gap-8`}>
-                            <button className="xl:hidden p-4 rounded absolute top-0 right-0" onClick={() => setIsFiltersMenuOpen(false)}>×</button>
-                            <form role="menuitem" className={`px-8 pt-6 pb-8 mb-4 max-w-lg mx-auto`} onSubmit={handleTextSearch}>
+                        <div className={`${isFiltersMenuOpen ? 'block' : 'hidden'} xl:block flex flex-col items-stretch justify-center gap-8`}>
+                            <button className="xl:hidden px-4 py-2 rounded absolute top-0 right-0 text-xl font-bold hover:bg-primary-200" onClick={() => setIsFiltersMenuOpen(false)}>×</button>
+                            <form role="menuitem" className={`px-4 pt-4 mt-4`} onSubmit={handleTextSearch}>
                                 <div>
                                     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="search">
                                         Search
@@ -150,7 +173,21 @@ export default function index({ products = [], categories = [], totalCount }: Pa
                                     </div>
                                 </div>
                             </form>
-                            <form role="menuitem" className="px-8 pt-6 pb-8 mb-4 max-w-lg mx-auto" onSubmit={handleCategorySearch}>
+                            <form role="menuitem" className="px-4 pt-4" onSubmit={handleShowFeaturedOnly}>
+                                <div>
+                                    <small className="block text-gray-700 text-sm font-bold mb-2">
+                                        Featured Items
+                                    </small>
+                                    <div className="flex flex-col mb-4">
+                                        <div className="flex flex-col items-center justify-center gap-y-2">
+                                            <button className="bg-primary-500 hover:bg-primary-700 text-white font-bold py-2 px-4 rounded focus:shadow-outline" type="submit">
+                                                {showFeaturedOnly ? "Hide" : "Show"} Featured Items
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <form role="menuitem" className="px-4 pt-4" onSubmit={handleCategorySearch}>
                                 <div>
                                     <small className="block text-gray-700 text-sm font-bold mb-2">
                                         Categories
@@ -173,7 +210,7 @@ export default function index({ products = [], categories = [], totalCount }: Pa
                                     </div>
                                 </div>
                             </form>
-                            <div role="menuitem" className="px-8 pt-6 pb-8 mb-4 max-w-lg mx-auto">
+                            <div role="menuitem" className="px-4 pt-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="sort">
                                     Sort
                                 </label>
@@ -185,7 +222,7 @@ export default function index({ products = [], categories = [], totalCount }: Pa
                                     <option value="-name">Alphabetical (Descending)</option>
                                 </select>
                             </div>
-                            <div role="menuitem" className="mt-4 flex flex-col items-center justify-center gap-y-2">
+                            <div role="menuitem" className="mt-4 px-8 pt-6 pb-8 mb-4 flex flex-col items-center justify-center gap-y-2">
                                 <button onClick={handleSearchAll} className="bg-primary-500 hover:bg-primary-700 text-white font-bold py-2 px-4 rounded focus:shadow-outline" type="submit">
                                     Apply all filters
                                 </button>

@@ -19,7 +19,7 @@ export default function Page({ products = [] }) {
                 <Link href="/products"><button className="bg-primary-500 hover:bg-primary-700 text-white font-bold py-2 px-4 rounded">See our Products</button></Link>
             </section>
             <section className="flex flex-col justify-center items-center px-4 py-16">
-                <Link href="/products"><h2 className="font-bold text-3xl mb-4 hover:underline cursor-pointer text-center"><a>Featured Products</a></h2></Link>
+                <Link href="/products?featured=true"><h2 className="font-bold text-3xl mb-4 hover:underline cursor-pointer text-center"><a>Featured Products</a></h2></Link>
                 <div className="flex flex-wrap gap-12 justify-center items-start py-12">
                     {products.length > 0 ? products.map(product => (
                         <ProductPreview product={product} key={product.id} />
