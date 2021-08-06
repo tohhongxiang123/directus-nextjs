@@ -10,12 +10,19 @@ import { serialize } from "."
  * @params query - Query object
  * @returns Product[]
  */
-export default async function getProducts<T extends { [key: string]: any }>(query = {} as T): Promise<{ data: Product[], meta: { filter_count: number } }> {
+export default async function getProducts<T extends { [key: string]: any }>(query = {} as T): Promise<{ data: Product[], meta: { filter_count: number } }> {    
     const allParams = {
         fields: '*,image.id,categories.categories_id,secondary_images.directus_files_id',
         meta: 'filter_count',
-        ...query
+        ...query,
+        filter: {
+            hidden: { _eq: false },
+            ...query.filter
+        }
     }
+
+    console.log(allParams)
+
     let { data, meta } = await fetch(`${API_URL}/items/products?${serialize(allParams)}`).then(r => r.json())
     data = await Promise.all(data.map(async product => ({
         ...product,
