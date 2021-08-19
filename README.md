@@ -80,6 +80,8 @@ More information and other `.env` variables are found [here](https://docs.direct
 
 To setup nodemailer for email notifications, follow [this](https://medium.com/nerd-for-tech/coding-a-contact-form-with-next-js-and-nodemailer-d3a8dc6cd645) and unlock display captcha [here](https://accounts.google.com/DisplayUnlockCaptcha)
 
+You will also need to point snipcart's [webhook](https://app.snipcart.com/dashboard/webhooks) configuration to your website
+
 - Create GMAIL account
 - Go to "Manage your Google Account"
 - Go to security
