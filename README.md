@@ -74,6 +74,18 @@ More information and other `.env` variables are found [here](https://docs.direct
 - `DIRECTUS_PASSWORD` - Password used for directus admin user
 - `SNIPCART_KEY` - Snipcart public key
 - `SNIPCART_SECRET` - Snipcart secret key
+- `SMTP_EMAIL` - Email to send notifications for new orders
+- `SMTP_PASSWORD` - Password to send notifications for new orders
+- `SEND_NOTIFICATIONS_TO_EMAIL` - Email to send the notifications to
+
+To setup nodemailer for email notifications, follow [this](https://medium.com/nerd-for-tech/coding-a-contact-form-with-next-js-and-nodemailer-d3a8dc6cd645) and unlock display captcha [here](https://accounts.google.com/DisplayUnlockCaptcha)
+
+- Create GMAIL account
+- Go to "Manage your Google Account"
+- Go to security
+- Go to "Less secure app access"
+- Allow
+- Go [here](https://accounts.google.com/DisplayUnlockCaptcha) and unlock
 
 1. Run the following commands to get the cms running
 

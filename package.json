@@ -22,6 +22,7 @@
         "directus": "^9.0.0-rc.74",
         "next": "^10.2.3",
         "node-fetch": "^2.6.1",
+        "nodemailer": "^6.6.3",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
         "react-image-lightbox": "^5.1.1",
@@ -30,6 +31,7 @@
         "typeorm": "^0.2.34"
     },
     "devDependencies": {
+        "@types/nodemailer": "^6.4.4",
         "@types/react": "^17.0.11",
         "autoprefixer": "^10.2.6",
         "postcss": "^8.3.1",
